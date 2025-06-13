@@ -7,17 +7,17 @@
   margin: 4rem;
   border-radius: 15px;
 
-  .login-container {
+  &-container {
     display: flex;
     background-color: white;
 
     border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
     width: 800px;
 
     &-placeholder {
-      width: 30%;
-      height: 22rem;
+      width: 50%;
+      height: 24rem;
       background-color: grey;
     }
 
@@ -45,10 +45,11 @@
       }
 
       Button {
-        width: 100%;
+        width: 30%;
         padding: 0.75rem;
         font-size: 1rem;
         border-radius: 4px;
+        text-align: center;
       }
 
       &-create {
