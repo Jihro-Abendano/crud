@@ -9,9 +9,9 @@ const LandingLogin = () => {
       <div className={styles["login-container"]}>
         <div className={styles["login-container-placeholder"]}></div>
         <div className={styles["login-container-form"]}>
-          <div className={styles["login-container-form-text"]}>
+          <h1 className={styles["login-container-form-text"]}>
             Login to your account
-          </div>
+          </h1>
           <Form>
             <Input
               type="email"
@@ -31,7 +31,7 @@ const LandingLogin = () => {
             <Button type="submit" color="primary">
               Login
             </Button>
-            <a href="/" className={styles["login-container-create"]}>
+            <a href="/signup" className={styles["login-container-create"]}>
               Create An Account
             </a>
           </div>
