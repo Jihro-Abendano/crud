@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import styles from "./Signup.module.scss";
 import { Form, Input, Button } from "reactstrap";
-import axios from "axios";
+import { api } from "../../api/axios";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -11,15 +11,30 @@ const Signup = () => {
     password: "",
   });
 
-  const createUser = async (newUser) => {
+  const handleChange = (e) => {
+    setFormData((prevalue) => {
+      return {
+        ...prevalue,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
-      const response = await axios.post(
-        "https://react-testing-server.onrender.com/api/v1",
-        newUser
-      );
-    } catch (error) {
-      console.error("Error creating user: ", error);
-      throw error;
+      const response = await api.post("/signup", formData);
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+      });
+
+      console.log(response);
+    } catch (e) {
+      console.log("Error in creating user: ", e);
     }
   };
 
@@ -28,41 +43,45 @@ const Signup = () => {
       <div className={styles["signup-container"]}>
         <div className={styles["signup-container-form"]}>
           <h1 className={styles["signup-container-form-text"]}>Sign up</h1>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Input
               type="text"
-              name="firstname"
+              name="firstName"
               placeholder="First Name"
               value={formData.firstName}
+              onChange={handleChange}
             />
             <Input
               type="text"
-              name="lastname"
+              name="lastName"
               placeholder="Last Name"
               value={formData.lastName}
+              onChange={handleChange}
             />
             <Input
               type="email"
               name="email"
               placeholder="Email"
               value={formData.email}
+              onChange={handleChange}
             />
             <Input
               type="password"
               name="password"
               placeholder="Password"
               value={formData.password}
+              onChange={handleChange}
             />
-          </Form>
 
-          <div className={styles["signup-container-form-actions"]}>
-            <Button type="submit" color="primary">
-              Sign up
-            </Button>
-            <a href="/" className={styles["signup-container-form-create"]}>
-              Log in
-            </a>
-          </div>
+            <div className={styles["signup-container-form-actions"]}>
+              <Button type="submit" color="primary">
+                Sign up
+              </Button>
+              <a href="/" className={styles["signup-container-form-create"]}>
+                Log in
+              </a>
+            </div>
+          </Form>
         </div>
       </div>
     </div>
