@@ -3,7 +3,7 @@ import { Form, Input, Button } from "reactstrap";
 import styles from "./LandingLogin.module.scss";
 import axios from "../../api/axios";
 import Cookies from "universal-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const LandingLogin = () => {
   const cookies = new Cookies();
@@ -68,40 +68,65 @@ const LandingLogin = () => {
   };
 
   return (
-    <section>
-      <p
-        ref={errRef}
-        className={errMsg ? "errmsg" : "offscreen"}
-        aria-live="assertive"
-      >
-        {errMsg}
-      </p>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email: </label>
-        <input
-          type="text"
-          id="email"
-          ref={emailRef}
-          autoComplete="off"
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+    <section className={styles["login"]}>
+      <div className={styles["login-container"]}>
+        <p
+          ref={errRef}
+          className={`${
+            errMsg
+              ? styles["login-container-error-msg"]
+              : styles["login-container-error-msg-offscreen"]
+          }`}
+          aria-live="assertive"
+        >
+          {errMsg}
+        </p>
+        <h1 className={styles["login-container-title"]}>Login</h1>
+        <Form
+          onSubmit={handleSubmit}
+          className={styles["login-container-form"]}
+        >
+          <label
+            htmlFor="email"
+            className={styles["login-container-form-label"]}
+          >
+            Email:{" "}
+          </label>
+          <Input
+            type="text"
+            id="email"
+            ref={emailRef}
+            autoComplete="off"
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className={styles["login-container-form-input"]}
+          />
 
-        <label htmlFor="password">Password: </label>
-        <input
-          type="password"
-          id="password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button>Log In</button>
-      </form>
+          <label
+            htmlFor="password"
+            className={styles["login-container-form-label"]}
+          >
+            Password:{" "}
+          </label>
+          <Input
+            type="password"
+            id="password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className={styles["login-container-form-input"]}
+          />
+          <Button className={styles["login-container-form-button"]}>
+            Log In
+          </Button>
+        </Form>
 
-      <p>
-        No Account?
-        <a href="#">Sign up</a>
-      </p>
+        <p className={styles["login-container-signup-text"]}>
+          No Account?
+          <Link to="/signup" className={styles["login-container-signup-link"]}>
+            Sign Up
+          </Link>
+        </p>
+      </div>
     </section>
   );
 };
