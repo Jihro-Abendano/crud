@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-
 import { Form, Input, Button } from "reactstrap";
 import styles from "./LandingLogin.module.scss";
 import axios from "../../api/axios";
@@ -16,7 +15,6 @@ const LandingLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     emailRef.current.focus();
@@ -29,11 +27,44 @@ const LandingLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(email, password);
-    setEmail("");
-    setPassword("");
+    try {
+      const response = await axios.post(
+        "/auth/login",
+        JSON.stringify({ email: email, password: password }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log(JSON.stringify(response));
+      const token = response.data.data.token;
 
-    navigate("/home");
+      cookies.set("token", token, {
+        path: "/",
+        secure: true,
+        sameSite: "none",
+      });
+
+      cookies.set("firstName", response.data.data.firstName);
+      cookies.set("lastName", response.data.data.lastName);
+
+      navigate("/home");
+
+      setEmail("");
+      setPassword("");
+    } catch (err) {
+      if (!err?.response) {
+        errMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Missing Username or Pasword");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+
+      errRef.current.focus();
+    }
   };
 
   return (
