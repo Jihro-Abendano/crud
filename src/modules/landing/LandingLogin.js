@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Form, Input, Button } from "reactstrap";
 import styles from "./LandingLogin.module.scss";
-import { api } from "../../api/axios";
+import axios from "../../api/axios";
+import Cookies from "universal-cookie";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+
+const cookies = new Cookies();
 
 const LandingLogin = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -19,9 +26,18 @@ const LandingLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/login", formData);
+      const response = await axios.post("/login", formData);
       console.log("Login successful:", response.data);
-      //token
+
+      const token = response.data.token;
+
+      if (token) {
+        cookies.set("auth_token", token, { path: "/", maxAge: 3600 });
+        const user = jwtDecode(token);
+        console.log("Decoded user: ", user);
+
+        navigate("/home");
+      }
     } catch (error) {
       console.error("Login error:", error);
     }
