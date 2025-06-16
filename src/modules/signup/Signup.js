@@ -67,8 +67,13 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "/signup",
-        JSON.stringify({ email, pwd }),
+        "/user/signup",
+        JSON.stringify({
+          email: email,
+          password: pwd,
+          firstName: firstName,
+          lastName: lastName,
+        }),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -79,13 +84,15 @@ const Signup = () => {
       console.log(response.accessToken);
       console.log(JSON.stringify(response));
       navigate("/");
-      //clear input fields
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
+      } else {
+        console.error("Server Error:", err.response.data);
+        setErrMsg(err.response.data?.message || "Registration Failed");
       }
 
-      errRef.current.focus();
+      errRef.current?.focus();
     }
   };
   return (
@@ -100,7 +107,7 @@ const Signup = () => {
         </p>
         <h1>Sign up</h1>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Email: </label>
+          <label htmlFor="email">Email: </label>
 
           <input
             type="text"
@@ -112,6 +119,20 @@ const Signup = () => {
             aria-describedby="emailnote"
             onFocus={() => setEmailFocus(true)}
             onBlur={() => setEmailFocus(false)}
+          />
+
+          <label htmlFor="firstName">First Name: </label>
+          <input
+            type="text"
+            id="firstName"
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+
+          <label htmlFor="lastName">Last Name: </label>
+          <input
+            type="text"
+            id="lastName"
+            onChange={(e) => setLastName(e.target.value)}
           />
 
           <label htmlFor="password">Password: </label>
