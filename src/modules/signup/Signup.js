@@ -1,178 +1,125 @@
-import { React, useState, useRef, useEffect } from "react";
+import React from "react";
 import styles from "./Signup.module.scss";
-import { Form, Input, Button } from "reactstrap";
-import axios from "../../api/axios";
-import { useNavigate } from "react-router-dom";
-
-const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import { Link } from "react-router-dom";
+import useSignup from "./useSignup";
 
 const Signup = () => {
-  const emailRef = useRef();
-  const errRef = useRef();
+  const {
+    email,
+    firstName,
+    lastName,
+    pwd,
+    matchPwd,
+    validEmail,
+    validPwd,
+    validMatch,
+    emailRef,
+    errRef,
+    emailFocus,
+    pwdFocus,
+    matchFocus,
+    errMsg,
+    setEmail,
+    setFirstName,
+    setLastName,
+    setPwd,
+    setMatchPwd,
+    setEmailFocus,
+    setPwdFocus,
+    setMatchFocus,
+    handleSubmit,
+  } = useSignup();
 
-  const [email, setEmail] = useState("");
-  const [validEmail, setValidEmail] = useState(false);
-  const [emailFocus, setEmailFocus] = useState(false);
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-
-  const [pwd, setPwd] = useState("");
-  const [validPwd, setValidPwd] = useState(false);
-  const [pwdFocus, setPwdFocus] = useState(false);
-
-  const [matchPwd, setMatchPwd] = useState("");
-  const [validMatch, setValidMatch] = useState("");
-  const [matchFocus, setMatchFocus] = useState("");
-
-  const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
-
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    emailRef.current.focus();
-  }, []);
-
-  useEffect(() => {
-    const result = EMAIL_REGEX.test(email);
-    console.log(result);
-    console.log(email);
-    setValidEmail(result);
-  }, [email]);
-
-  useEffect(() => {
-    const result = PWD_REGEX.test(pwd);
-    console.log(result);
-    console.log(pwd);
-    setValidPwd(result);
-    const match = pwd === matchPwd;
-    setValidMatch(match);
-  }, [pwd, matchPwd]);
-
-  useEffect(() => {
-    setErrMsg("");
-  }, [email, pwd, matchPwd]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const v1 = EMAIL_REGEX.test(email);
-    const v2 = PWD_REGEX.test(pwd);
-    if (!v1 || !v2) {
-      setErrMsg("Invalid Entry");
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        "/user/signup",
-        JSON.stringify({
-          email: email,
-          password: pwd,
-          firstName: firstName,
-          lastName: lastName,
-        }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-
-      console.log(response.data);
-      console.log(response.accessToken);
-      console.log(JSON.stringify(response));
-      navigate("/");
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg("No Server Response");
-      } else {
-        console.error("Server Error:", err.response.data);
-        setErrMsg(err.response.data?.message || "Registration Failed");
-      }
-
-      errRef.current?.focus();
-    }
-  };
   return (
-    <>
-      <section>
+    <section className={styles["signup"]}>
+      <div className={styles["signup-container"]}>
         <p
           ref={errRef}
-          className={errMsg ? "errmsg" : "offscreen"}
+          className={
+            errMsg
+              ? styles["signup-container-error-msg"]
+              : styles["signup-container-error-msg-offscreen"]
+          }
           aria-live="assertive"
         >
           {errMsg}
         </p>
-        <h1>Sign up</h1>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email: </label>
 
-          <input
-            type="text"
-            id="email"
-            ref={emailRef}
-            autoComplete="off"
-            onChange={(e) => setEmail(e.target.value)}
-            aria-invalid={validEmail ? "false" : "true"}
-            aria-describedby="emailnote"
-            onFocus={() => setEmailFocus(true)}
-            onBlur={() => setEmailFocus(false)}
-          />
+        <h1 className={styles["signup-container-title"]}>Sign Up</h1>
 
-          <label htmlFor="firstName">First Name: </label>
-          <input
-            type="text"
-            id="firstName"
-            onChange={(e) => setFirstName(e.target.value)}
-          />
+        <Form onSubmit={handleSubmit}>
+          <FormGroup>
+            <Label for="email">Email</Label>
+            <Input
+              type="text"
+              id="email"
+              ref={emailRef}
+              autoComplete="off"
+              onChange={(e) => setEmail(e.target.value)}
+              aria-invalid={validEmail ? "false" : "true"}
+              onFocus={() => setEmailFocus(true)}
+              onBlur={() => setEmailFocus(false)}
+            />
+          </FormGroup>
 
-          <label htmlFor="lastName">Last Name: </label>
-          <input
-            type="text"
-            id="lastName"
-            onChange={(e) => setLastName(e.target.value)}
-          />
+          <FormGroup>
+            <Label for="firstName">First Name</Label>
+            <Input
+              type="text"
+              id="firstName"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+          </FormGroup>
 
-          <label htmlFor="password">Password: </label>
+          <FormGroup>
+            <Label for="lastName">Last Name</Label>
+            <Input
+              type="text"
+              id="lastName"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </FormGroup>
 
-          <input
-            type="password"
-            id="password"
-            onChange={(e) => setPwd(e.target.value)}
-            required
-            aria-invalid={validPwd ? "false" : "true"}
-            aria-describedby="pwdnote"
-            onFocus={() => setPwdFocus(true)}
-            onBlur={() => setPwdFocus(false)}
-          />
+          <FormGroup>
+            <Label for="password">Password</Label>
+            <Input
+              type="password"
+              id="password"
+              onChange={(e) => setPwd(e.target.value)}
+              required
+              aria-invalid={validPwd ? "false" : "true"}
+              onFocus={() => setPwdFocus(true)}
+              onBlur={() => setPwdFocus(false)}
+            />
+          </FormGroup>
 
-          <label htmlFor="confirm_pwd">Confirm Password: </label>
-          <input
-            type="password"
-            id="confirm_pwd"
-            onChange={(e) => setMatchPwd(e.target.value)}
-            required
-            aria-invalid={validMatch ? "false" : "true"}
-            aria-describedby="confirmnote"
-            onFocus={() => setMatchFocus(true)}
-            onBlur={() => setMatchFocus(false)}
-          />
+          <FormGroup>
+            <Label for="confirm_pwd">Confirm Password</Label>
+            <Input
+              type="password"
+              id="confirm_pwd"
+              onChange={(e) => setMatchPwd(e.target.value)}
+              required
+              aria-invalid={validMatch ? "false" : "true"}
+              onFocus={() => setMatchFocus(true)}
+              onBlur={() => setMatchFocus(false)}
+            />
+          </FormGroup>
 
-          <button
-            disabled={!validEmail || !validPwd || !validMatch ? true : false}
-          >
-            Sign up
-          </button>
-        </form>
+          <Button className={styles["signup-container-button"]}>Sign Up</Button>
+        </Form>
 
-        <p>
+        <p className={styles["signup-container-login-text"]}>
           Already registered?
-          <a href="#">Log in</a>
+          <Link to="/" className={styles["signup-container-login-link"]}>
+            Log In
+          </Link>
         </p>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
