@@ -5,13 +5,18 @@ import LandingRoute from "./views/landing/index.js";
 import Signup from "./modules/signup/Signup";
 import Home from "./modules/home/Home";
 import Posts from "./modules/posts/posts";
+import RequireAuth from "./components/RequireAuth.js";
 const App = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<LandingRoute />} />
+
+        <Route element={<RequireAuth />}>
+          <Route path="/home" element={<Home />} />
+        </Route>
+
         <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/posts" element={<Posts />} />
       </Routes>
     </>
