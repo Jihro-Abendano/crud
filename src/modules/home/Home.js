@@ -74,7 +74,7 @@ const Home = () => {
         <ul>
           {posts.map((post) => (
             <li key={post.postId}>
-              {post.title}
+              {post.title} ||
               {post.message}
             </li>
           ))}
