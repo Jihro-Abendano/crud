@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, Navigate } from "react-router-dom";
+import { Button } from "reactstrap";
+import styles from "./Home.module.scss";
 const Home = () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
@@ -10,10 +11,27 @@ const Home = () => {
 
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    cookies.remove("token");
+    cookies.remove("firstName");
+    cookies.remove("lastName");
+
+    navigate("/");
+  };
+
+  if (!token) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
-    <div>
-      Hello {firstName || "User"} {lastName || ""}
-    </div>
+    <section className={styles["home"]}>
+      <div>
+        Hello {firstName || "User"} {lastName || ""}
+      </div>
+
+      <Button>Edit profile</Button>
+      <Button onClick={handleLogout}>Log out</Button>
+    </section>
   );
 };
 
