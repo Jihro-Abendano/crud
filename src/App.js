@@ -4,7 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import LandingRoute from "./views/landing/index.js";
 import Signup from "./modules/signup/Signup";
 import Home from "./modules/home/Home";
-import Posts from "./modules/posts/posts";
+
 import RequireAuth from "./components/RequireAuth.js";
 const App = () => {
   return (
@@ -17,7 +17,6 @@ const App = () => {
         </Route>
 
         <Route path="/signup" element={<Signup />} />
-        <Route path="/posts" element={<Posts />} />
       </Routes>
     </>
   );
