@@ -43,7 +43,7 @@ const LandingLogin = () => {
         path: "/",
         secure: true,
         sameSite: "none",
-        maxAge: 10,
+        maxAge: 3600,
       });
 
       cookies.set("firstName", response.data.data.firstName);
