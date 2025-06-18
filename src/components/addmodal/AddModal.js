@@ -38,6 +38,7 @@ const AddModal = ({ addModal, toggleAddModal, handleAddPost }) => {
 
             <Input
               id="message"
+              type="textarea"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Enter message"
