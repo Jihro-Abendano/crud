@@ -23,7 +23,7 @@ const AddModal = ({ addModal, toggleAddModal, handleAddPost }) => {
     toggleAddModal();
   };
   return (
-    <Modal isOpen={addModal}>
+    <Modal isOpen={addModal} toggle={toggleAddModal}>
       <ModalHeader>Add Post</ModalHeader>
       <ModalBody>
         <Form onSubmit={handleSubmit}>

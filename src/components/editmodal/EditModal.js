@@ -1,5 +1,4 @@
-import React, { useEffect } from "react"; // Make sure useEffect is imported
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalHeader,
@@ -23,8 +22,8 @@ const EditModal = ({
 
   useEffect(() => {
     if (selectedPost) {
-      setTitle(selectedPost.title || ""); // Initialize with existing title
-      setMessage(selectedPost.message || ""); // Initialize with existing message
+      setTitle(selectedPost.title || "");
+      setMessage(selectedPost.message || "");
     }
   }, [selectedPost]);
 

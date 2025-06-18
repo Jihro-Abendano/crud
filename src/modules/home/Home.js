@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { useNavigate, Navigate } from "react-router-dom";
-import { Button, Table } from "reactstrap";
+import { Button } from "reactstrap";
 import styles from "./Home.module.scss";
 import axios from "../../api/axios";
+import TablePosts from "../../components/tableposts/TablePosts";
 import AddModal from "../../components/addmodal/AddModal";
 import EditModal from "../../components/editmodal/EditModal";
+import DeleteModal from "../../components/deletemodal/DeleteModal";
 
 const Home = () => {
   const cookies = new Cookies();
@@ -21,12 +23,10 @@ const Home = () => {
   const [editModal, setEditModal] = useState(false);
   const toggleEditModal = () => setEditModal(!editModal);
 
-  const [selectedPost, setSelectedPost] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const toggleDeleteModal = () => setDeleteModal(!deleteModal);
 
-  const openEditModal = (post) => {
-    setSelectedPost(post);
-    setEditModal(true);
-  };
+  const [selectedPost, setSelectedPost] = useState(null);
 
   const handleLogout = () => {
     cookies.remove("token");
@@ -58,7 +58,6 @@ const Home = () => {
 
   const handleAddPost = async (newPost) => {
     try {
-      const token = cookies.get("token");
       await axios.post("/post", newPost, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -73,7 +72,6 @@ const Home = () => {
 
   const handleEditPost = async (updatedPost) => {
     try {
-      const token = cookies.get("token");
       await axios.put(`/post/${updatedPost.postId}`, updatedPost, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,6 +84,20 @@ const Home = () => {
     }
   };
 
+  const handleDeletePost = async (post) => {
+    try {
+      await axios.delete(`/post/${post.postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toggleDeleteModal();
+      fetchPosts();
+    } catch (err) {
+      console.error("Error deleting post: ", err);
+    }
+  };
+
   if (!token) {
     return <Navigate to="/" replace />;
   }
@@ -95,46 +107,21 @@ const Home = () => {
       <div className={styles["home-greeting"]}>
         Hello {firstName || "User"} {lastName || ""}
       </div>
-      <Table striped responsive>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {posts.length === 0 ? (
-            <tr>
-              <td colSpan={4} className="text-center">
-                No posts yet
-              </td>
-            </tr>
-          ) : (
-            posts.map((post, index) => (
-              <tr key={index}>
-                <td>{post.title}</td>
-                <td>{post.message}</td>
-                <td>{new Date(post.createdAt).toLocaleDateString()}</td>
-                <td>
-                  <Button onClick={() => openEditModal(post)} color="warning">
-                    Edit
-                  </Button>{" "}
-                  <Button>Delete</Button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </Table>
       <Button onClick={toggleAddModal} color="success">
         Create Post
-      </Button>{" "}
-      <Button color="info">Edit profile</Button>{" "}
+      </Button>
+      <Button color="info">Edit profile</Button>
       <Button onClick={handleLogout} color="secondary">
         Log out
       </Button>
+
+      <TablePosts
+        posts={posts}
+        setSelectedPost={setSelectedPost}
+        toggleEditModal={toggleEditModal}
+        toggleDeleteModal={toggleDeleteModal}
+      />
+
       <AddModal
         addModal={addModal}
         toggleAddModal={toggleAddModal}
@@ -144,6 +131,12 @@ const Home = () => {
         editModal={editModal}
         toggleEditModal={toggleEditModal}
         handleEditPost={handleEditPost}
+        selectedPost={selectedPost}
+      />
+      <DeleteModal
+        deleteModal={deleteModal}
+        toggleDeleteModal={toggleDeleteModal}
+        handleDeletePost={handleDeletePost}
         selectedPost={selectedPost}
       />
     </section>
