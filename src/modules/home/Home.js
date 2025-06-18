@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Cookies from "universal-cookie";
 import { useNavigate, Navigate } from "react-router-dom";
-import { Button } from "reactstrap";
+import { Button, Table } from "reactstrap";
 import styles from "./Home.module.scss";
 import axios from "../../api/axios";
 import AddModal from "../../components/addmodal/AddModal";
@@ -17,6 +17,9 @@ const Home = () => {
   const [addModal, setAddModal] = useState(false);
   const toggleAddModal = () => setAddModal(!addModal);
 
+  const [editModal, setEditModal] = useState(false);
+  const toggleEditModal = () => setEditModal(!editModal);
+
   const handleLogout = () => {
     cookies.remove("token");
     cookies.remove("firstName");
@@ -30,7 +33,7 @@ const Home = () => {
     try {
       const cookies = new Cookies();
       const token = cookies.get("token");
-      const response = await axios.get("/post?orderBy=title&order=DESC", {
+      const response = await axios.get("/post?orderBy=createdAt&order=DESC", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -60,6 +63,21 @@ const Home = () => {
     }
   };
 
+  const handleEditPost = async (updatedPost) => {
+    try {
+      const token = cookies.get("token");
+      await axios.put(`/post/${updatedPost.postId}`, updatedPost, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      fetchPosts();
+    } catch (err) {
+      console.error("Error updating post: ", err);
+    }
+  };
+
   if (!token) {
     return <Navigate to="/" replace />;
   }
@@ -69,21 +87,43 @@ const Home = () => {
       <div className={styles["home-greeting"]}>
         Hello {firstName || "User"} {lastName || ""}
       </div>
-
-      <div>
-        <ul>
-          {posts.map((post) => (
-            <li key={post.postId}>
-              {post.title} ||
-              {post.message}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <Button onClick={toggleAddModal}>Create Post</Button>
-      <Button>Edit profile</Button>
-      <Button onClick={handleLogout}>Log out</Button>
-
+      <Table striped responsive>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {posts.length === 0 ? (
+            <tr>
+              <td colSpan={4} className="text-center">
+                No posts yet
+              </td>
+            </tr>
+          ) : (
+            posts.map((post, index) => (
+              <tr key={index}>
+                <td>{post.title}</td>
+                <td>{post.message}</td>
+                <td>{new Date(post.createdAt).toLocaleDateString()}</td>
+                <td>
+                  <Button>Edit</Button> <Button>Delete</Button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </Table>
+      <Button onClick={toggleAddModal} color="success">
+        Create Post
+      </Button>{" "}
+      <Button color="info">Edit profile</Button>{" "}
+      <Button onClick={handleLogout} color="secondary">
+        Log out
+      </Button>
       <AddModal
         addModal={addModal}
         toggleAddModal={toggleAddModal}
