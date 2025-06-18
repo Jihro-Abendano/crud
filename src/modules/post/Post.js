@@ -13,6 +13,10 @@ import DeleteModal from "../../components/deletemodal/DeleteModal";
 const Post = () => {
   const {
     token,
+    currentPosts,
+    currentPage,
+    setCurrentPage,
+    totalPages,
     firstName,
     lastName,
     posts,
@@ -41,21 +45,31 @@ const Post = () => {
       <Button onClick={toggleAddModal} color="success">
         Create Post
       </Button>
-      <Button color="info">Edit profile</Button>
+      {/* <Button color="info">Edit profile</Button> */}
       <Button onClick={handleLogout} color="secondary">
         Log out
       </Button>
 
       <TablePosts
-        posts={posts}
+        posts={currentPosts}
         setSelectedPost={setSelectedPost}
         toggleEditModal={toggleEditModal}
         toggleDeleteModal={toggleDeleteModal}
       />
 
-      <Button>Previous</Button>
-      <span></span>
-      <Button>Next</Button>
+      <Button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(currentPage - 1)}
+      >
+        Previous
+      </Button>
+
+      <Button
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage(currentPage + 1)}
+      >
+        Next
+      </Button>
 
       <AddModal
         addModal={addModal}

@@ -22,6 +22,13 @@ const usePost = () => {
   const toggleEditModal = () => setEditModal((prev) => !prev);
   const toggleDeleteModal = () => setDeleteModal((prev) => !prev);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(5);
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = posts.slice(firstPostIndex, lastPostIndex);
+  const totalPages = Math.ceil(posts.length / postsPerPage);
+
   const handleLogout = () => {
     cookies.remove("token");
     cookies.remove("firstName");
@@ -29,14 +36,11 @@ const usePost = () => {
     navigate("/");
   };
 
-  const fetchPosts = async (page = 1) => {
+  const fetchPosts = async () => {
     try {
-      const response = await axios.get(
-        "/post?orderBy=createdAt&order=DESC&limit=5",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get("/post?orderBy=createdAt&order=DESC", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const { data } = response.data;
       setPosts(data);
     } catch (err) {
@@ -85,11 +89,15 @@ const usePost = () => {
   };
 
   useEffect(() => {
-    if (token) fetchPosts();
-  });
+    fetchPosts();
+  }, []);
 
   return {
     token,
+    currentPosts,
+    currentPage,
+    setCurrentPage,
+    totalPages,
     firstName,
     lastName,
     posts,
