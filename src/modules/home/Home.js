@@ -5,6 +5,7 @@ import { Button, Table } from "reactstrap";
 import styles from "./Home.module.scss";
 import axios from "../../api/axios";
 import AddModal from "../../components/addmodal/AddModal";
+import EditModal from "../../components/editmodal/EditModal";
 
 const Home = () => {
   const cookies = new Cookies();
@@ -19,6 +20,13 @@ const Home = () => {
 
   const [editModal, setEditModal] = useState(false);
   const toggleEditModal = () => setEditModal(!editModal);
+
+  const [selectedPost, setSelectedPost] = useState(null);
+
+  const openEditModal = (post) => {
+    setSelectedPost(post);
+    setEditModal(true);
+  };
 
   const handleLogout = () => {
     cookies.remove("token");
@@ -110,7 +118,10 @@ const Home = () => {
                 <td>{post.message}</td>
                 <td>{new Date(post.createdAt).toLocaleDateString()}</td>
                 <td>
-                  <Button>Edit</Button> <Button>Delete</Button>
+                  <Button onClick={() => openEditModal(post)} color="warning">
+                    Edit
+                  </Button>{" "}
+                  <Button>Delete</Button>
                 </td>
               </tr>
             ))
@@ -128,6 +139,12 @@ const Home = () => {
         addModal={addModal}
         toggleAddModal={toggleAddModal}
         handleAddPost={handleAddPost}
+      />
+      <EditModal
+        editModal={editModal}
+        toggleEditModal={toggleEditModal}
+        handleEditPost={handleEditPost}
+        selectedPost={selectedPost}
       />
     </section>
   );
