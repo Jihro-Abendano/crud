@@ -47,7 +47,7 @@ const useLogin = () => {
       cookies.set("firstName", firstName);
       cookies.set("lastName", lastName);
 
-      navigate("/home");
+      navigate("/post");
 
       setEmail("");
       setPassword("");
