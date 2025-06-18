@@ -17,6 +17,9 @@ const Home = () => {
 
   const navigate = useNavigate();
 
+  const [posts, setPosts] = useState([]);
+  const [meta, setMeta] = useState(null);
+
   const [addModal, setAddModal] = useState(false);
   const toggleAddModal = () => setAddModal(!addModal);
 
@@ -28,6 +31,8 @@ const Home = () => {
 
   const [selectedPost, setSelectedPost] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   const handleLogout = () => {
     cookies.remove("token");
     cookies.remove("firstName");
@@ -36,18 +41,20 @@ const Home = () => {
     navigate("/");
   };
 
-  const [posts, setPosts] = useState([]);
-  const fetchPosts = async () => {
+  const fetchPosts = async (page = 1) => {
     try {
-      const cookies = new Cookies();
-      const token = cookies.get("token");
-      const response = await axios.get("/post?orderBy=createdAt&order=DESC", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        "/post?orderBy=createdAt&order=DESC&limit=5",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      setPosts(response.data.data);
+      const { data, meta } = response.data;
+      setPosts(data);
+      setMeta(meta);
     } catch (err) {
       console.error("Error fetching posts: ", err);
     }
@@ -122,6 +129,11 @@ const Home = () => {
         toggleDeleteModal={toggleDeleteModal}
       />
 
+      <Button>Previous</Button>
+      <span>
+        Page {currentPage} of {meta.totalPages}
+      </span>
+      <Button>Next</Button>
       <AddModal
         addModal={addModal}
         toggleAddModal={toggleAddModal}
