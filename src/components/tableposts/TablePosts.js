@@ -1,5 +1,15 @@
 import React from "react";
-import { Table, Button } from "reactstrap";
+import "./TablePosts.scss";
+
+import {
+  Table,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+} from "reactstrap";
+import { BsThreeDotsVertical } from "react-icons/bs";
+
 const TablePosts = ({
   posts,
   setSelectedPost,
@@ -7,22 +17,26 @@ const TablePosts = ({
   toggleDeleteModal,
   toggleViewModal,
 }) => {
+  const [dropdownOpen, setDropdownOpen] = React.useState(null);
+
+  const toggleDropdown = (index) => {
+    setDropdownOpen(dropdownOpen === index ? null : index);
+  };
+
   return (
-    <Table striped responsive>
-      <thead>
+    <Table responsive className="table">
+      <thead className="table-head">
         <tr>
           <th>Title</th>
           <th>Content</th>
           <th>Date</th>
-          <th>Actions</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         {posts.length === 0 ? (
           <tr>
-            <td colSpan={4} className="text-center">
-              No posts yet
-            </td>
+            <td colSpan={4}>No posts yet</td>
           </tr>
         ) : (
           posts.map((post, index) => (
@@ -31,32 +45,49 @@ const TablePosts = ({
               <td>{post.message}</td>
               <td>{new Date(post.createdAt).toLocaleDateString()}</td>
               <td>
-                <Button
-                  onClick={() => {
-                    setSelectedPost(post);
-                    toggleEditModal();
-                  }}
-                  color="warning"
+                <Dropdown
+                  isOpen={dropdownOpen === index}
+                  toggle={() => toggleDropdown(index)}
                 >
-                  Edit
-                </Button>
-                <Button
-                  onClick={() => {
-                    setSelectedPost(post);
-                    toggleDeleteModal();
-                  }}
-                  color="danger"
-                >
-                  Delete
-                </Button>
-                <Button
-                  onClick={() => {
-                    setSelectedPost(post);
-                    toggleViewModal();
-                  }}
-                >
-                  View
-                </Button>
+                  <DropdownToggle
+                    tag="span"
+                    onClick={() => toggleDropdown(index)}
+                    data-toggle="dropdown"
+                    aria-expanded={dropdownOpen === index}
+                    className="table-body-dropdown"
+                  >
+                    <BsThreeDotsVertical />
+                  </DropdownToggle>
+                  <DropdownMenu end>
+                    <DropdownItem
+                      onClick={() => {
+                        setSelectedPost(post);
+                        toggleViewModal();
+                        setDropdownOpen(null);
+                      }}
+                    >
+                      View
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => {
+                        setSelectedPost(post);
+                        toggleEditModal();
+                        setDropdownOpen(null);
+                      }}
+                    >
+                      Edit
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => {
+                        setSelectedPost(post);
+                        toggleDeleteModal();
+                        setDropdownOpen(null);
+                      }}
+                    >
+                      Delete
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </td>
             </tr>
           ))
