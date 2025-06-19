@@ -16,10 +16,12 @@ const usePost = () => {
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
 
+  const [viewModal, setViewModal] = useState(false);
   const [addModal, setAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
+  const toggleViewModal = () => setViewModal((prev) => !prev);
   const toggleAddModal = () => setAddModal((prev) => !prev);
   const toggleEditModal = () => setEditModal((prev) => !prev);
   const toggleDeleteModal = () => setDeleteModal((prev) => !prev);
@@ -50,6 +52,20 @@ const usePost = () => {
         setExpired(true);
       }
       console.error("Error fetching posts: ", err);
+    }
+  };
+
+  const handleViewPost = async (post) => {
+    try {
+      await axios.get(`/post/${post.postId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      toggleViewModal();
+    } catch (err) {
+      console.error("Error getting post: ", err);
     }
   };
 
@@ -113,7 +129,6 @@ const usePost = () => {
   return {
     token,
     expired,
-    setExpired,
     currentPosts,
     currentPage,
     setCurrentPage,
@@ -123,13 +138,16 @@ const usePost = () => {
     posts,
     selectedPost,
     setSelectedPost,
+    viewModal,
     addModal,
     editModal,
     deleteModal,
+    toggleViewModal,
     toggleAddModal,
     toggleEditModal,
     toggleDeleteModal,
     handleLogout,
+    handleViewPost,
     handleAddPost,
     handleEditPost,
     handleDeletePost,

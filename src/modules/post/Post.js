@@ -10,12 +10,12 @@ import AddModal from "../../components/addmodal/AddModal";
 import EditModal from "../../components/editmodal/EditModal";
 import DeleteModal from "../../components/deletemodal/DeleteModal";
 import ExpiredModal from "../../components/expiredmodal/ExpiredModal";
+import ViewModal from "../../components/viewmodal/ViewModal";
 
 const Post = () => {
   const {
     token,
     expired,
-    setExpired,
     currentPosts,
     currentPage,
     setCurrentPage,
@@ -25,19 +25,20 @@ const Post = () => {
     posts,
     selectedPost,
     setSelectedPost,
+    viewModal,
     addModal,
     editModal,
     deleteModal,
+    toggleViewModal,
     toggleAddModal,
     toggleEditModal,
     toggleDeleteModal,
     handleLogout,
+    handleViewModal,
     handleAddPost,
     handleEditPost,
     handleDeletePost,
   } = usePost();
-
-  // if (!token) return <Navigate to="/" replace />;
 
   return (
     <section className={styles["home"]}>
@@ -56,6 +57,7 @@ const Post = () => {
       <TablePosts
         posts={currentPosts}
         setSelectedPost={setSelectedPost}
+        toggleViewModal={toggleViewModal}
         toggleEditModal={toggleEditModal}
         toggleDeleteModal={toggleDeleteModal}
       />
@@ -73,6 +75,13 @@ const Post = () => {
       >
         Next
       </Button>
+
+      <ViewModal
+        viewModal={viewModal}
+        toggleViewModal={toggleViewModal}
+        handleViewModal={handleViewModal}
+        selectedPost={selectedPost}
+      />
 
       <AddModal
         addModal={addModal}

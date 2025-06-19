@@ -5,6 +5,7 @@ const TablePosts = ({
   setSelectedPost,
   toggleEditModal,
   toggleDeleteModal,
+  toggleViewModal,
 }) => {
   return (
     <Table striped responsive>
@@ -47,6 +48,14 @@ const TablePosts = ({
                   color="danger"
                 >
                   Delete
+                </Button>
+                <Button
+                  onClick={() => {
+                    setSelectedPost(post);
+                    toggleViewModal();
+                  }}
+                >
+                  View
                 </Button>
               </td>
             </tr>
