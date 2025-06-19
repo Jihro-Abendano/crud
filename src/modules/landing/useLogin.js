@@ -41,7 +41,7 @@ const useLogin = () => {
         path: "/",
         secure: true,
         sameSite: "none",
-        maxAge: 2,
+        maxAge: 3600,
       });
 
       cookies.set("firstName", firstName);
