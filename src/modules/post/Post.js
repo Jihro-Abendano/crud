@@ -47,7 +47,9 @@ const Post = () => {
       </div>
 
       <div className={styles["home-buttons"]}>
-        <Button color="success">Create Post</Button>{" "}
+        <Button onClick={toggleAddModal} color="success">
+          Create Post
+        </Button>{" "}
         <Button onClick={handleLogout} color="secondary">
           Log out
         </Button>

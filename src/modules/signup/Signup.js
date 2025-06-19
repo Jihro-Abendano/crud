@@ -61,6 +61,11 @@ const Signup = () => {
               onFocus={() => setEmailFocus(true)}
               onBlur={() => setEmailFocus(false)}
             />
+            {emailFocus && email && !validEmail && (
+              <p className={styles["signup-container-instruction"]}>
+                Please enter a valid email address.
+              </p>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -94,6 +99,12 @@ const Signup = () => {
               onFocus={() => setPwdFocus(true)}
               onBlur={() => setPwdFocus(false)}
             />
+            {pwdFocus && !validPwd && pwd && (
+              <p className={styles["signup-container-instruction"]}>
+                Password must be 8-24 characters and include uppercase,
+                lowercase, number, and special character.
+              </p>
+            )}
           </FormGroup>
 
           <FormGroup>
@@ -107,6 +118,11 @@ const Signup = () => {
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
             />
+            {matchFocus && !validMatch && matchPwd && (
+              <p className={styles["signup-container-instruction"]}>
+                Must match the password.
+              </p>
+            )}
           </FormGroup>
 
           <Button className={styles["signup-container-button"]}>Sign Up</Button>
