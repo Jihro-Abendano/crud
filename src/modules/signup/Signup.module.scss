@@ -13,6 +13,12 @@
     width: 100%;
     max-width: 400px;
 
+    &-instruction {
+      font-size: 0.875rem;
+      color: red;
+      margin-top: 0.25rem;
+    }
+
     &-error-msg {
       color: #dc3545;
       background-color: #f8d7da;
