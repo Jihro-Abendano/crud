@@ -11,6 +11,8 @@ const usePost = () => {
 
   const navigate = useNavigate();
 
+  const [expired, setExpired] = useState(false);
+
   const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
 
@@ -44,6 +46,9 @@ const usePost = () => {
       const { data } = response.data;
       setPosts(data);
     } catch (err) {
+      if (err.response?.status === 403) {
+        setExpired(true);
+      }
       console.error("Error fetching posts: ", err);
     }
   };
@@ -58,6 +63,11 @@ const usePost = () => {
       });
       fetchPosts();
     } catch (err) {
+      if (err.response?.status === 403) {
+        setAddModal(false);
+
+        setExpired(true);
+      }
       console.error("Error adding post: ", err);
     }
   };
@@ -72,6 +82,10 @@ const usePost = () => {
       });
       fetchPosts();
     } catch (err) {
+      if (err.response?.status === 403) {
+        setEditModal(false);
+        setExpired(true);
+      }
       console.error("Error updating post: ", err);
     }
   };
@@ -84,6 +98,10 @@ const usePost = () => {
       toggleDeleteModal();
       fetchPosts();
     } catch (err) {
+      if (err.response?.status === 403) {
+        setDeleteModal(false);
+        setExpired(true);
+      }
       console.error("Error deleting post: ", err);
     }
   };
@@ -94,6 +112,8 @@ const usePost = () => {
 
   return {
     token,
+    expired,
+    setExpired,
     currentPosts,
     currentPage,
     setCurrentPage,

@@ -9,10 +9,13 @@ import TablePosts from "../../components/tableposts/TablePosts";
 import AddModal from "../../components/addmodal/AddModal";
 import EditModal from "../../components/editmodal/EditModal";
 import DeleteModal from "../../components/deletemodal/DeleteModal";
+import ExpiredModal from "../../components/expiredmodal/ExpiredModal";
 
 const Post = () => {
   const {
     token,
+    expired,
+    setExpired,
     currentPosts,
     currentPage,
     setCurrentPage,
@@ -34,7 +37,7 @@ const Post = () => {
     handleDeletePost,
   } = usePost();
 
-  if (!token) return <Navigate to="/" replace />;
+  // if (!token) return <Navigate to="/" replace />;
 
   return (
     <section className={styles["home"]}>
@@ -88,6 +91,8 @@ const Post = () => {
         handleDeletePost={handleDeletePost}
         selectedPost={selectedPost}
       />
+
+      <ExpiredModal expired={expired} handleLogout={handleLogout} />
     </section>
   );
 };
