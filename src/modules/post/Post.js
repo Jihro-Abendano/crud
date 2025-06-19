@@ -46,13 +46,12 @@ const Post = () => {
         Hello {firstName || "User"} {lastName || ""}
       </div>
 
-      <Button onClick={toggleAddModal} color="success">
-        Create Post
-      </Button>
-      {/* <Button color="info">Edit profile</Button> */}
-      <Button onClick={handleLogout} color="secondary">
-        Log out
-      </Button>
+      <div className={styles["home-buttons"]}>
+        <Button color="success">Create Post</Button>{" "}
+        <Button onClick={handleLogout} color="secondary">
+          Log out
+        </Button>
+      </div>
 
       <TablePosts
         posts={currentPosts}
@@ -61,20 +60,23 @@ const Post = () => {
         toggleEditModal={toggleEditModal}
         toggleDeleteModal={toggleDeleteModal}
       />
+      <div className={styles["home-pages"]}>
+        <Button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+          className={styles["home-pages-prev"]}
+        >
+          Previous
+        </Button>
 
-      <Button
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage(currentPage - 1)}
-      >
-        Previous
-      </Button>
-
-      <Button
-        disabled={currentPage === totalPages}
-        onClick={() => setCurrentPage(currentPage + 1)}
-      >
-        Next
-      </Button>
+        <Button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+          className={styles["home-pages-next"]}
+        >
+          Next
+        </Button>
+      </div>
 
       <ViewModal
         viewModal={viewModal}
