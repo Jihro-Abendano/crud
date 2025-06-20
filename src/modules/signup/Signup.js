@@ -128,6 +128,8 @@ const Signup = () => {
           <Button className={styles["signup-container-button"]}>Sign Up</Button>
         </Form>
 
+        <p className={styles["signup-container-or"]}>Or</p>
+
         <p className={styles["signup-container-login-text"]}>
           Already registered?
           <Link to="/" className={styles["signup-container-login-link"]}>

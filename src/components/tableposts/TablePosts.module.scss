@@ -2,7 +2,7 @@
   table-layout: fixed;
   width: 100%;
 
-  thead {
+  &-head {
     background-color: #009476;
     color: white;
   }
@@ -14,27 +14,22 @@
 
   th:nth-child(1),
   td:nth-child(1) {
-    width: 33.33%; // 3/12
+    width: 33.33%;
   }
 
   th:nth-child(2),
   td:nth-child(2) {
-    width: 41.66%; // 5/12
+    width: 41.66%;
   }
 
   th:nth-child(3),
   td:nth-child(3) {
-    width: 16.66%; // 2/12
+    width: 16.66%;
   }
 
   th:nth-child(4),
   td:nth-child(4) {
-    width: 8.33%; // 1/12
-  }
-
-  &-head {
-    background-color: #009476;
-    color: white;
+    width: 8.33%;
   }
 
   &-body-dropdown {

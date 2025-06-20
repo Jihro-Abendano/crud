@@ -35,11 +35,11 @@ const EditModal = ({
   };
 
   return (
-    <Modal isOpen={editModal} toggle={toggleEditModal}>
+    <Modal isOpen={editModal} toggle={toggleEditModal} centered>
       {" "}
-      <ModalHeader>Edit Post</ModalHeader>{" "}
-      <ModalBody>
-        <Form onSubmit={handleSubmit}>
+      <ModalHeader>Edit Post</ModalHeader>
+      <Form onSubmit={handleSubmit}>
+        <ModalBody>
           <FormGroup>
             <Label for="title">Title</Label>
             <Input
@@ -47,10 +47,10 @@ const EditModal = ({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter title"
+              required
             />
-          </FormGroup>{" "}
+          </FormGroup>
           <FormGroup>
-            {" "}
             <Label for="message">Message</Label>
             <Input
               id="message"
@@ -58,18 +58,19 @@ const EditModal = ({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Enter message"
+              required
             />
           </FormGroup>
-        </Form>
-      </ModalBody>
-      <ModalFooter>
-        <Button color="primary" onClick={handleSubmit}>
-          Submit
-        </Button>{" "}
-        <Button color="secondary" onClick={toggleEditModal}>
-          Cancel
-        </Button>
-      </ModalFooter>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" type="submit">
+            Submit
+          </Button>
+          <Button color="secondary" onClick={toggleEditModal}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Form>
     </Modal>
   );
 };

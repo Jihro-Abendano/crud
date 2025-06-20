@@ -5,7 +5,7 @@ const ViewModal = ({ viewModal, toggleViewModal, selectedPost }) => {
   if (!selectedPost) return null;
 
   return (
-    <Modal isOpen={viewModal} toggle={toggleViewModal}>
+    <Modal isOpen={viewModal} toggle={toggleViewModal} centered>
       <ModalHeader toggle={toggleViewModal}>View Post</ModalHeader>
       <ModalBody>
         <h5>Title:</h5>

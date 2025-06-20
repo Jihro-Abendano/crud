@@ -8,7 +8,7 @@ const DeleteModal = ({
   selectedPost,
 }) => {
   return (
-    <Modal isOpen={deleteModal} toggle={toggleDeleteModal}>
+    <Modal isOpen={deleteModal} toggle={toggleDeleteModal} centered>
       <ModalHeader toggle={toggleDeleteModal}>Delete Post</ModalHeader>
       <ModalBody>
         Are you sure you want to delete {selectedPost?.title}?
