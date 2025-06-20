@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, Button } from "reactstrap";
 
 const ExpiredModal = ({ expired, handleLogout }) => {
   return (
-    <Modal isOpen={expired}>
+    <Modal isOpen={expired} centered>
       <ModalHeader>Session Expired</ModalHeader>
       <ModalBody>
         Your session has expired. Please log in again.

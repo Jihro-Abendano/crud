@@ -6,6 +6,7 @@ import styles from "./Post.module.scss";
 import usePost from "./usePost";
 
 import TablePosts from "../../components/tableposts/TablePosts";
+import PageButtons from "../../components/pagebuttons/PageButtons";
 import AddModal from "../../components/addmodal/AddModal";
 import EditModal from "../../components/editmodal/EditModal";
 import DeleteModal from "../../components/deletemodal/DeleteModal";
@@ -41,43 +42,32 @@ const Post = () => {
   } = usePost();
 
   return (
-    <section className={styles["home"]}>
-      <div className={styles["home-greeting"]}>
-        Hello {firstName || "User"} {lastName || ""}
-      </div>
+    <section className={styles["post"]}>
+      <div className={styles["post-container"]}>
+        <div className={styles["post-greeting"]}>
+          Hello {firstName || "User"} {lastName || ""}
+          <Button onClick={handleLogout} color="secondary">
+            Log out
+          </Button>
+        </div>
+        <div className={styles["post-buttons"]}>
+          <Button onClick={toggleAddModal} color="success">
+            Create Post
+          </Button>{" "}
+        </div>
+        <TablePosts
+          posts={currentPosts}
+          setSelectedPost={setSelectedPost}
+          toggleViewModal={toggleViewModal}
+          toggleEditModal={toggleEditModal}
+          toggleDeleteModal={toggleDeleteModal}
+        />
 
-      <div className={styles["home-buttons"]}>
-        <Button onClick={toggleAddModal} color="success">
-          Create Post
-        </Button>{" "}
-        <Button onClick={handleLogout} color="secondary">
-          Log out
-        </Button>
-      </div>
-
-      <TablePosts
-        posts={currentPosts}
-        setSelectedPost={setSelectedPost}
-        toggleViewModal={toggleViewModal}
-        toggleEditModal={toggleEditModal}
-        toggleDeleteModal={toggleDeleteModal}
-      />
-      <div className={styles["home-pages"]}>
-        <Button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
-          className={styles["home-pages-prev"]}
-        >
-          Previous
-        </Button>
-
-        <Button
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage(currentPage + 1)}
-          className={styles["home-pages-next"]}
-        >
-          Next
-        </Button>
+        <PageButtons
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
 
       <ViewModal

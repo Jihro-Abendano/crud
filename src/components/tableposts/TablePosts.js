@@ -1,5 +1,5 @@
 import React from "react";
-import "./TablePosts.scss";
+import styles from "./TablePosts.module.scss";
 
 import {
   Table,
@@ -24,8 +24,8 @@ const TablePosts = ({
   };
 
   return (
-    <Table responsive className="table">
-      <thead className="table-head">
+    <Table responsive className={styles["table"]}>
+      <thead className={styles["table-head"]}>
         <tr>
           <th>Title</th>
           <th>Content</th>
@@ -54,7 +54,7 @@ const TablePosts = ({
                     onClick={() => toggleDropdown(index)}
                     data-toggle="dropdown"
                     aria-expanded={dropdownOpen === index}
-                    className="table-body-dropdown"
+                    className={styles["table-body-dropdown"]}
                   >
                     <BsThreeDotsVertical />
                   </DropdownToggle>

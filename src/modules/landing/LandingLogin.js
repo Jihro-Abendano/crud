@@ -61,6 +61,8 @@ const LandingLogin = () => {
           </Button>
         </Form>
 
+        <p className={styles["login-container-or"]}>Or</p>
+
         <p className={styles["login-container-signup-text"]}>
           No Account?
           <Link to="/signup" className={styles["login-container-signup-link"]}>
