@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { Button } from "reactstrap";
+import { Alert, Button } from "reactstrap";
 import styles from "./Post.module.scss";
 
 import usePost from "./usePost";
@@ -12,9 +12,12 @@ import EditModal from "../../components/editmodal/EditModal";
 import DeleteModal from "../../components/deletemodal/DeleteModal";
 import ExpiredModal from "../../components/expiredmodal/ExpiredModal";
 import ViewModal from "../../components/viewmodal/ViewModal";
+import AlertToast from "../../components/toast/AlertToast";
 
 const Post = () => {
   const {
+    toast,
+    toastColor,
     token,
     expired,
     currentPosts,
@@ -55,6 +58,9 @@ const Post = () => {
             Create Post
           </Button>{" "}
         </div>
+
+        <AlertToast toast={toast} toastColor={toastColor} />
+
         <TablePosts
           posts={currentPosts}
           setSelectedPost={setSelectedPost}
