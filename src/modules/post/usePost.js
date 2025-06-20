@@ -33,6 +33,18 @@ const usePost = () => {
   const currentPosts = posts.slice(firstPostIndex, lastPostIndex);
   const totalPages = Math.ceil(posts.length / postsPerPage);
 
+  const [toast, setToast] = useState({
+    visible: false,
+    message: "",
+    toastColor: "",
+  });
+  const toggleToast = (message, toastColor) => {
+    setToast({ visible: true, message, toastColor });
+
+    setTimeout(() => {
+      setToast({ visible: false, message: "", toastColor: "" });
+    }, 3000);
+  };
   const handleLogout = () => {
     cookies.remove("token");
     cookies.remove("firstName");
@@ -78,10 +90,10 @@ const usePost = () => {
         },
       });
       fetchPosts();
+      toggleToast("Successfully added post", "bg-success");
     } catch (err) {
       if (err.response?.status === 403) {
         setAddModal(false);
-
         setExpired(true);
       }
       console.error("Error adding post: ", err);
@@ -97,6 +109,7 @@ const usePost = () => {
         },
       });
       fetchPosts();
+      toggleToast("Successfully Edited post", "bg-primary");
     } catch (err) {
       if (err.response?.status === 403) {
         setEditModal(false);
@@ -113,6 +126,7 @@ const usePost = () => {
       });
       toggleDeleteModal();
       fetchPosts();
+      toggleToast("Successfully Deleted post", "bg-danger");
     } catch (err) {
       if (err.response?.status === 403) {
         setDeleteModal(false);
@@ -151,6 +165,8 @@ const usePost = () => {
     handleAddPost,
     handleEditPost,
     handleDeletePost,
+    toast,
+    toggleToast,
   };
 };
 
